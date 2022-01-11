@@ -1,0 +1,45 @@
+{
+  "extends": [
+    "config:base",
+    ":timezone(Asia/Tokyo)"
+  ],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "schedule": ["after 10pm and before 5am every weekday", "every weekend"],
+  "dependencyDashboard": true,
+  "major": {
+    "stabilityDays": 7
+  },
+  "minor": {
+    "stabilityDays": 3
+  },
+  "patch": {
+    "stabilityDays": 2,
+    "automerge": true
+  },
+  "pin": {
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "devDependencies",
+      "rangeStrategy": "update-lockfile",
+      "automerge": true
+    },
+    {
+      "groupName": "linters",
+      "extends": [
+        "packages:linters"
+      ],
+      "packageNames": [
+        "prettier"
+      ],
+      "packagePatterns": [
+        "^@typescript-eslint/"
+      ]
+    }
+  ]
+}
