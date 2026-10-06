@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "任意: minor/patch を依存種別に関係なく 1 本の PR にまとめる（CI が重いリポジトリ向け）。`github>imagica-et/renovate:group-non-major` を default の後に extends する。0.x の minor は default の承認制ルールに従いグループから外す。",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "matchCurrentVersion": "<1.0.0",
+      "matchUpdateTypes": ["minor"],
+      "groupName": null
+    }
+  ]
+}
