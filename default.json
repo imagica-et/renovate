@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "imagica-et 共通の Renovate 設定。自動マージは既定で行わない（main マージがデプロイを起動するリポジトリがあるため、必要なリポジトリ側で明示的に有効化する）。",
+  "description": "imagica-et 共通の Renovate 設定。自動マージは既定で行わない（main マージがデプロイを起動するリポジトリがあるため、必要なリポジトリ側で明示的に有効化する）。 minimumReleaseAge はリリース日時を返さないデータソース（Docker イメージ等）を永久に保留にしないよう timestamp-optional にする。",
   "extends": [
     "config:recommended",
     ":timezone(Asia/Tokyo)"
@@ -13,6 +13,7 @@
     "before 9am on monday"
   ],
   "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "internalChecksFilter": "strict",
   "lockFileMaintenance": {
     "enabled": true,
