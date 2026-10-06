@@ -1,45 +1,77 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "imagica-et 共通の Renovate 設定。自動マージは既定で行わない（main マージがデプロイを起動するリポジトリがあるため、必要なリポジトリ側で明示的に有効化する）。",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":timezone(Asia/Tokyo)"
   ],
   "labels": [
     "dependencies",
     "renovate"
   ],
-  "schedule": ["after 10pm and before 5am every weekday", "every weekend"],
-  "dependencyDashboard": true,
-  "major": {
-    "stabilityDays": 7
+  "schedule": [
+    "before 9am on monday"
+  ],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 9am on the first day of the month"
+    ]
   },
-  "minor": {
-    "stabilityDays": 3
-  },
-  "patch": {
-    "stabilityDays": 2,
-    "automerge": true
-  },
-  "pin": {
-    "automerge": true
+  "vulnerabilityAlerts": {
+    "labels": [
+      "dependencies",
+      "renovate",
+      "security"
+    ]
   },
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies"],
-      "groupName": "devDependencies",
-      "rangeStrategy": "update-lockfile",
-      "automerge": true
+      "description": "devDependencies は package.json の範囲指定を書き換えず lockfile だけ更新する。",
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "rangeStrategy": "update-lockfile"
     },
     {
-      "groupName": "linters",
+      "description": "devDependencies の minor/patch は 1 本の PR にまとめる。",
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "devDependencies (non-major)"
+    },
+    {
+      "description": "Linter / Formatter はまとめて更新する。",
       "extends": [
         "packages:linters"
       ],
-      "packageNames": [
-        "prettier"
+      "matchPackageNames": [
+        "prettier",
+        "@typescript-eslint/**"
       ],
-      "packagePatterns": [
-        "^@typescript-eslint/"
-      ]
+      "groupName": "linters"
+    },
+    {
+      "description": "メジャー更新は Dependency Dashboard で承認したものだけ PR 化する（移行計画に沿って 1 本ずつ進める）。",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "0.x 系の minor は semver 上破壊的変更になり得るため、メジャーと同じく承認制にし、グループにも混ぜない（例: drizzle-orm, esbuild）。",
+      "matchCurrentVersion": "<1.0.0",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "dependencyDashboardApproval": true,
+      "groupName": null
     }
   ]
 }
